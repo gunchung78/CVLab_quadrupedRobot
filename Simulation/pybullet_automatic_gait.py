@@ -86,7 +86,10 @@ def main(id, command_status):
         print(result_dict)
         command_status.put(result_dict)
 
-        print(robot.getAngle())
+        Orn,_,_ = robot.getIMU()
+        Ornx ,Orny ,_,_= Orn
+        # print(robot.getAngle())
+        print(round(Ornx, 3) ,round(Orny, 3))
 
         if result_dict['StartStepping']:
             robot.feetPosition(trotting.positions(d-3, result_dict))

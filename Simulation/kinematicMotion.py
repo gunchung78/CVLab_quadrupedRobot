@@ -174,8 +174,15 @@ class TrottingGait:
         Ry=-100
 
         # front left / front right / rear left / rear right
-        r=np.array([self.calcLeg(td,Fx,Fy,spf),self.calcLeg(rtd,Fx,Fy,-spf),self.calcLeg(rtd,Rx,Ry,spr),self.calcLeg(td,Rx,Ry,-spr)])
-
+        r=np.array([self.calcLeg(td,Fx,Fy,spf),
+                    self.calcLeg(rtd,Fx,Fy,-spf),
+                    self.calcLeg(rtd,Rx,Ry,spr),
+                    self.calcLeg(td,Rx,Ry,-spr)])
+        # 앞 왼쪽
+        # 앞 오른쪽
+        # 뒤 왼쪽
+        # 뒤 오른쪽
+        
         # Cat Trotting Example
         Tt4=Tt/4
 

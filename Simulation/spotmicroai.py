@@ -123,7 +123,7 @@ class Robot:
         p.configureDebugVisualizer(p.COV_ENABLE_RENDERING, 0)
         p.setGravity(0, 0, -9.81)
 
-        orn = p.getQuaternionFromEuler([math.pi/30*0, 0*math.pi/50, 0])
+        orn = p.getQuaternionFromEuler([math.pi/30*0, 0*math.pi/50, 0]) ## 바닥 경사
         p.setAdditionalSearchPath(pybullet_data.getDataPath())
         planeUid = p.loadURDF("plane_transparent.urdf", [0, 0, 0], orn)
         p.changeDynamics(planeUid, -1, lateralFriction=1)
