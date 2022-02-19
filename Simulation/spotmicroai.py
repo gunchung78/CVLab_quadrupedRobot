@@ -23,9 +23,11 @@ class RobotState(Enum):
 
 class Robot:
 
-    def __init__(self,useFixedBase=False,useStairs=True,resetFunc=None):      
+    def __init__(self,useFixedBase=False,useStairs=True,resetFunc=None,planex=0,planey=0):      
 
         # Simulation Configuration
+        self.planex = planex
+        self.planey = planey
         self.useMaximalCoordinates = False
         self.resetFunc=resetFunc
         self.useRealTime = True
@@ -37,7 +39,7 @@ class Robot:
         self.useFixedBase =useFixedBase
         self.useStairs=useStairs
 
-        self.init_oritentation=p.getQuaternionFromEuler([0, 0, 90.0])
+        self.init_oritentation=p.getQuaternionFromEuler([0, 0, 0]) ## 로봇 위치
         self.init_position=[0, 0, 0.2]
 
         self.reflection=False
@@ -123,7 +125,7 @@ class Robot:
         p.configureDebugVisualizer(p.COV_ENABLE_RENDERING, 0)
         p.setGravity(0, 0, -9.81)
 
-        orn = p.getQuaternionFromEuler([math.pi/30*0, 0*math.pi/50, 0]) ## 바닥 경사
+        orn = p.getQuaternionFromEuler([math.pi/30*self.planex, self.planey*math.pi/50, 0]) ## 바닥 경사
         p.setAdditionalSearchPath(pybullet_data.getDataPath())
         planeUid = p.loadURDF("plane_transparent.urdf", [0, 0, 0], orn)
         p.changeDynamics(planeUid, -1, lateralFriction=1)

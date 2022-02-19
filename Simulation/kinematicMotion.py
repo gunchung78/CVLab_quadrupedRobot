@@ -6,6 +6,7 @@ import time
 import numpy as np
 import math
 import pybullet as p
+import spotmicroai
 
 class KinematicLegMotion:
 
@@ -182,7 +183,7 @@ class TrottingGait:
         # 앞 오른쪽
         # 뒤 왼쪽
         # 뒤 오른쪽
-        
+
         # Cat Trotting Example
         Tt4=Tt/4
 

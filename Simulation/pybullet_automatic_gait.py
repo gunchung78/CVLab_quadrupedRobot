@@ -47,7 +47,7 @@ def consoleClear():
     else: 
         _ = system('clear') 
 
-robot=spotmicroai.Robot(False,False,reset)
+robot=spotmicroai.Robot(False,False,reset,0,1)
 
 spurWidth=robot.W/2+20
 stepLength=0
@@ -87,9 +87,8 @@ def main(id, command_status):
         command_status.put(result_dict)
 
         Orn,_,_ = robot.getIMU()
-        Ornx ,Orny ,_,_= Orn
         # print(robot.getAngle())
-        print(round(Ornx, 3) ,round(Orny, 3))
+        print(round(Orn[0]*180/math.pi, 3) ,round(Orn[1]*180/math.pi, 3))
 
         if result_dict['StartStepping']:
             robot.feetPosition(trotting.positions(d-3, result_dict))
