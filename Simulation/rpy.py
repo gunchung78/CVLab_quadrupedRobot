@@ -12,7 +12,7 @@ if (cid < 0):
   p.connect(p.GUI)
 
 p.setAdditionalSearchPath(pybullet_data.getDataPath())
-q = p.loadURDF("../urdf/spotmicroai_gen.urdf.xml", useFixedBase=True)
+q = p.loadURDF("plane.urdf", useFixedBase=True)
 rollId = p.addUserDebugParameter("roll", -3, 3, 0)
 pitchId = p.addUserDebugParameter("pitch", -3, 3, 0)
 yawId = p.addUserDebugParameter("yaw", -1.5, 1.5, 0)
@@ -29,7 +29,7 @@ while True:
   z = p.readUserDebugParameter(fwdzId)
 
   orn = p.getQuaternionFromEuler([roll, pitch, yaw])
-  p.resetBasePositionAndOrientation(q, [x, y, z], orn)
+  p.resetBasePositionAndOrientation(q, [x, y, z], orn)#orn [x,y,z,w]
   _ , orn_c = p.getBasePositionAndOrientation(q) 
   orn_cx, orn_cy, _, _=orn_c
   print(orn_cx, orn_cy)

@@ -38,6 +38,7 @@ class Robot:
         self.numSolverIterations = 200
         self.useFixedBase =useFixedBase
         self.useStairs=useStairs
+        
 
         self.init_oritentation=p.getQuaternionFromEuler([0, 0, 0]) ## 로봇 위치
         self.init_position=[0, 0, 0.2]
@@ -71,6 +72,9 @@ class Robot:
         self.IDkp = p.addUserDebugParameter("Kp", 0, 0.05, self.kp) # 0.05
         self.IDkd = p.addUserDebugParameter("Kd", 0, 1, self.kd) # 0.5
         self.IDmaxForce = p.addUserDebugParameter("MaxForce", 0, 50, 12.5)
+        self.rollId = p.addUserDebugParameter("roll", -10, 10, 0) ###
+        self.pitchId = p.addUserDebugParameter("pitch", -10, 10, 0) ###
+
 
         p.setRealTimeSimulation(self.useRealTime)
 
@@ -125,12 +129,12 @@ class Robot:
         p.configureDebugVisualizer(p.COV_ENABLE_RENDERING, 0)
         p.setGravity(0, 0, -9.81)
 
-        orn = p.getQuaternionFromEuler([math.pi/30*self.planex, self.planey*math.pi/50, 0]) ## 바닥 경사
+        orn = p.getQuaternionFromEuler([self.planex *(math.pi/180), self.planey *(math.pi/180), 0]) ## 바닥 경사
         p.setAdditionalSearchPath(pybullet_data.getDataPath())
-        planeUid = p.loadURDF("plane_transparent.urdf", [0, 0, 0], orn)
-        p.changeDynamics(planeUid, -1, lateralFriction=1)
+        self.planeUid = p.loadURDF("plane_transparent.urdf", [0, 0, 0], orn) ###
+        p.changeDynamics(self.planeUid, -1, lateralFriction=1) ###
         texUid = p.loadTexture("concrete.png")
-        p.changeVisualShape(planeUid, -1, textureUniqueId=texUid)
+        p.changeVisualShape(self.planeUid, -1, textureUniqueId=texUid) ###
         if self.useStairs:
             stairsUid = p.loadURDF("../urdf/stairs_gen.urdf.xml", [0, -1, 0], orn)
         flags=p.URDF_USE_SELF_COLLISION
@@ -258,6 +262,8 @@ class Robot:
         kp=p.readUserDebugParameter(self.IDkp)
         kd=p.readUserDebugParameter(self.IDkd)
         maxForce=p.readUserDebugParameter(self.IDmaxForce)
+        roll_p = p.readUserDebugParameter(self.rollId) ###
+        pitch_p = p.readUserDebugParameter(self.pitchId) ###
 
         self.handleCamera(bodyPos, bodyOrn)
         self.addInfoText(bodyPos,bodyEuler,linearVel,angularVel)
@@ -284,7 +290,8 @@ class Robot:
                                         positionGain=kp,
                                         velocityGain=kd,
                                         force=maxForce)  
-        
+        p.resetBasePositionAndOrientation(self.planeUid,(0,0,0),(roll_p*(math.pi/180), pitch_p*(math.pi/180), 0, 1))###
+
         nowLidarTime = time.time()
         if (nowLidarTime-self.lastLidarTime>.2):
             numThreads=0

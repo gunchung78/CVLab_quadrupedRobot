@@ -47,7 +47,7 @@ def consoleClear():
     else: 
         _ = system('clear') 
 
-robot=spotmicroai.Robot(False,False,reset,0,1)
+robot=spotmicroai.Robot(False,False,reset,0,0)
 
 spurWidth=robot.W/2+20
 stepLength=0
