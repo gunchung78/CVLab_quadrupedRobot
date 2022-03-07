@@ -38,9 +38,9 @@ class Robot:
         self.reflection=False
         self.state=RobotState.OFF
         # Parameters for Servos - still wrong
-        self.kp = 0.040#0.012
-        self.kd = 0.9#.2
-        self.maxForce = 12.5
+        self.kp = 0.03#0.045
+        self.kd = 0.8#.4
+        self.maxForce = 6
 
         self.angles = [0.0, 0.0, 0.0, \
                         0.0, 0.0, 0.0,
@@ -61,10 +61,10 @@ class Robot:
         if self.reflection:
             p.configureDebugVisualizer(p.COV_ENABLE_PLANAR_reflection, 1)
         p.configureDebugVisualizer(p.COV_ENABLE_TINY_RENDERER, 1)
-        
+
         self.IDkp = p.addUserDebugParameter("Kp", 0, 0.05, self.kp) # 0.05
         self.IDkd = p.addUserDebugParameter("Kd", 0, 1, self.kd) # 0.5
-        self.IDmaxForce = p.addUserDebugParameter("MaxForce", 0, 50, 12.5)
+        self.IDmaxForce = p.addUserDebugParameter("MaxForce", 0, 50, self.maxForce)
         self.rollId = p.addUserDebugParameter("roll", -10, 10, 0) ###
         self.pitchId = p.addUserDebugParameter("pitch", -10, 10, 0) ###
 

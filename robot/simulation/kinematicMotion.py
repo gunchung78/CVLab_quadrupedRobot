@@ -82,8 +82,8 @@ class TrottingGait:
         self.Sw=0
         self.Sh=60
         self.Sa=0
-        self.Spf=87
-        self.Spr=77
+        self.Spf=92 
+        self.Spr=82
 
         self.IDspurFront= p.addUserDebugParameter("spur front", 20, 150, self.Spf)
         self.IDspurRear= p.addUserDebugParameter("spur rear", 20, 150, self.Spr)
