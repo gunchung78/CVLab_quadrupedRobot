@@ -33,7 +33,7 @@ class Robot:
         self.useStairs=useStairs
 
         self.init_oritentation=p.getQuaternionFromEuler([0, 0, 0]) ### 로봇방향
-        self.init_position=[0, 0, 0.2]###생성위치
+        self.init_position=[0, 0, 0.3]###생성위치
 
         self.reflection=False
         self.state=RobotState.OFF

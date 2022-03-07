@@ -43,7 +43,7 @@ def settingimu(imux, imuy, iXf, spurWidth): ###
     blegy = -timuy*50
     return rlegx, llegx, flegy, blegy
 
-robot=Robot(False,False,reset)
+robot=Robot(True,False,reset)
 
 spurWidth=robot.W/2+20
 stepLength=0
