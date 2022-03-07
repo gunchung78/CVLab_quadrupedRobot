@@ -1,8 +1,4 @@
-"""
-Simulation of SpotMicroAI and it's Kinematics 
-Use a Gamepad to see how it works
-Use Gamepad-Button to switch betweek walk on static-mode
-"""
+
 from os import system, name 
 import sys
 sys.path.append("..")
@@ -30,7 +26,6 @@ def resetPose():
     joy_x, joy_y, joy_z, joy_rz = 128, 128, 128, 128
 
 def consoleClear():
-
     # for windows 
     if name == 'nt': 
         _ = system('cls') 

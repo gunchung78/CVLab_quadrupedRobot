@@ -1,14 +1,12 @@
-"""
-SpotMicroAI Simulation
-"""
 
 import pybullet_data
 import time
 import pybullet as p
 import math
 import numpy as np
-from .kinematics import Kinematic
 from enum import Enum
+
+from .kinematics import Kinematic
 
 class RobotState(Enum):
     OFF = 0     # don't do anything
@@ -34,7 +32,7 @@ class Robot:
         self.useFixedBase =useFixedBase
         self.useStairs=useStairs
 
-        self.init_oritentation=p.getQuaternionFromEuler([0, 0, 0]) ### 로봇위치
+        self.init_oritentation=p.getQuaternionFromEuler([0, 0, 0]) ### 로봇방향
         self.init_position=[0, 0, 0.2]###생성위치
 
         self.reflection=False
@@ -63,6 +61,7 @@ class Robot:
         if self.reflection:
             p.configureDebugVisualizer(p.COV_ENABLE_PLANAR_reflection, 1)
         p.configureDebugVisualizer(p.COV_ENABLE_TINY_RENDERER, 1)
+        
         self.IDkp = p.addUserDebugParameter("Kp", 0, 0.05, self.kp) # 0.05
         self.IDkd = p.addUserDebugParameter("Kd", 0, 1, self.kd) # 0.5
         self.IDmaxForce = p.addUserDebugParameter("MaxForce", 0, 50, 12.5)
