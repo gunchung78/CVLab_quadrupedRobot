@@ -128,4 +128,6 @@ if __name__=="__main__":
     setupView(200).view_init(elev=12., azim=28)
     Lp=np.array([[100,-100,100,1],[100,-100,-100,1],[-100,-100,100,1],[-100,-100,-100,1]])
     Kinematic().drawRobot(Lp,(0,0,0),(0,0,0))
+    a = Kinematic.legIK((100,100,100))
+    print(a)
     plt.show()

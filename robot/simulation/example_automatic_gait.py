@@ -6,15 +6,18 @@ import numpy as np
 import time
 import math
 import datetime as dt
-from .environment import environment
 
 import pybullet as p
 from .spotmicroai import Robot
 from .kinematicMotion import KinematicMotion,TrottingGait
+import serial
 
 
+PORT = 'COM7' #포트이름
+BaudRate = 9600 #전송속도
+angle_uart = serial.Serial(PORT,BaudRate)
 rtime=time.time()
-env=environment()
+
 
 def reset():
     global rtime
@@ -43,7 +46,7 @@ def settingimu(imux, imuy, iXf, spurWidth): ###
     blegy = -timuy*50
     return rlegx, llegx, flegy, blegy
 
-robot=Robot(True,False,reset)
+robot=Robot(False,False,reset)
 
 spurWidth=robot.W/2+20
 stepLength=0
@@ -79,15 +82,16 @@ def main(id, command_status):
         command_status.put(result_dict)
 
         print(robot.getAngle()) ###
+        # print(sys.getsizeof(robot.getAngle())) ###
         rlegx, llegx, flegy, blegy= settingimu(xr, yr, iXf, spurWidth) ###
         
         if result_dict['StartStepping']:
             robot.feetPosition(trotting.positions(d-3, result_dict,bodyOrn))
         else:
-            Lp = np.array([[iXf, -100 + llegx + flegy, spurWidth, 1], 
-                        [iXf, -100 + rlegx + flegy, -spurWidth, 1],
-                        [-50, -100 + llegx + blegy, spurWidth, 1], 
-                        [-50, -100 + rlegx + blegy, -spurWidth, 1]])
+            # Lp = np.array([[iXf, -100 + llegx + flegy, spurWidth, 1], 
+            #             [iXf, -100 + rlegx + flegy, -spurWidth, 1],
+            #             [-50, -100 + llegx + blegy, spurWidth, 1], 
+            #             [-50, -100 + rlegx + blegy, -spurWidth, 1]])
                         ###
             robot.feetPosition(Lp)
         #roll=-xr
@@ -97,6 +101,9 @@ def main(id, command_status):
         bodyX=50+yr*10
         robot.bodyPosition((bodyX, 40+height, -ir))
         robot.step()
+
+        angle_0,angle_1,angle_2,angle_3 = robot.getAngle() 
+        angle_uart.write(angle_0)
         consoleClear()
 
 

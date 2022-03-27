@@ -38,8 +38,8 @@ class Robot:
         self.reflection=False
         self.state=RobotState.OFF
         # Parameters for Servos - still wrong
-        self.kp = 0.03#0.045
-        self.kd = 0.8#.4
+        self.kp = 0.045#0.045
+        self.kd = 0.4#.4
         self.maxForce = 6
 
         self.angles = [0.0, 0.0, 0.0, \
@@ -179,7 +179,7 @@ class Robot:
 
         for i in range(nJoints):
             jointInfo = p.getJointInfo(quadruped, i)
-            jointNameToId[jointInfo[1].decode('UTF-8')] = jointInfo[0]
+            jointNameToId[jointInfo[1].decode('UTF-8')] = jointInfo[0]      
         return jointNameToId
 
     
