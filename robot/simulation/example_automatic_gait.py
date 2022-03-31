@@ -13,9 +13,15 @@ from .kinematicMotion import KinematicMotion,TrottingGait
 import serial
 
 
-PORT = 'COM7' #포트이름
-BaudRate = 9600 #전송속도
-angle_uart = serial.Serial(PORT,BaudRate)
+try:
+    PORT = 'COM7' #포트이름
+    BaudRate = 9600 #전송속도
+    angle_uart = serial.Serial(PORT,BaudRate)
+    uart_bool = True
+except:
+    uart_bool = False
+    pass
+
 rtime=time.time()
 
 
@@ -103,7 +109,14 @@ def main(id, command_status):
         robot.step()
 
         angle_0,angle_1,angle_2,angle_3 = robot.getAngle() 
-        angle_uart.write(angle_0)
+        # if angle_0[0] == float(angle_0[0]):
+        #     print("same")
+        #     print(type(float(angle_0[0])))
+        if uart_bool:
+            print(float(angle_0[0]))
+            angle_uart.write(float(angle_0[0]))
+        else:
+            print("uart: x")
         consoleClear()
 
 
