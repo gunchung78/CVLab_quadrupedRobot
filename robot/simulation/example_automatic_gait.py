@@ -1,4 +1,5 @@
 
+from ctypes import sizeof
 from os import system, name 
 import sys
 sys.path.append("..")
@@ -11,12 +12,13 @@ import pybullet as p
 from .spotmicroai import Robot
 from .kinematicMotion import KinematicMotion,TrottingGait
 import serial
+from .serial2servo import serial_servo
 
 
 try:
-    PORT = 'COM7' #포트이름
-    BaudRate = 9600 #전송속도
-    angle_uart = serial.Serial(PORT,BaudRate)
+    PORT = 'COM6' #포트이름
+    BaudRate = 115200 #전송속도
+    ard = serial.Serial(PORT,BaudRate)
     uart_bool = True
 except:
     uart_bool = False
@@ -107,16 +109,21 @@ def main(id, command_status):
         bodyX=50+yr*10
         robot.bodyPosition((bodyX, 40+height, -ir))
         robot.step()
-
-        angle_0,angle_1,angle_2,angle_3 = robot.getAngle() 
-        # if angle_0[0] == float(angle_0[0]):
-        #     print("same")
-        #     print(type(float(angle_0[0])))
+        
+        #pyserial part
+        ser = serial_servo(180, 1)
+        allangle =  robot.getAngle()*(180/math.pi)
         if uart_bool:
-            print(float(angle_0[0]))
-            angle_uart.write(float(angle_0[0]))
+             for i in 3:
+                 for j in 2:
+                    angl_float = 90 + allangle[i][j]
+                    angle_byte = ser.angle2byte(1, angl_float)
+                    ard.write(angle_byte[0])
+                    ard.write(angle_byte[1]) 
         else:
             print("uart: x")
+        
+
         consoleClear()
 
 

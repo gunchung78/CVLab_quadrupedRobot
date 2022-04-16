@@ -42,7 +42,7 @@ class Robot:
         self.kd = 0.4#.4
         self.maxForce = 6
 
-        self.angles = [0.0, 0.0, 0.0, \
+        self.angles = [0.0, 0.0, 0.0, 
                         0.0, 0.0, 0.0,
                         0.0, 0.0, 0.0,
                         0.0, 0.0, 0.0]
