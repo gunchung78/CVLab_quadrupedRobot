@@ -11,6 +11,7 @@ class serial_servo:
             print("angle X")
         else:
             if self.version == 1:
+                if angle >= 0 and angle <= 0.99: angle = 1.0
                 angle_int = int(angle)
                 angle_float = int(round(angle%angle_int,2)*100)
                 byte_angleint = bytes([angle_int])
@@ -21,17 +22,18 @@ class serial_servo:
 
 
 if __name__ == "__main__":
-    # ard = serial.Serial('COM6', 115200, timeout = 1)
-    # ser = serial_servo(180, 1)
-    # while True:
-    #     inangle = float(input())
-    #     angle = ser.angle2byte(1, inangle)
-    #     ard.write(angle[0])
-    #     ard.write(angle[1]) 
-    #     res = ard.readline()
-    #     print("ard: " + res.decode()[:len(res)-1])
-    x = [[1,2,3,],[2,3,4],[6,7,8],[9,10,11]]
-    y = 90 + x[1][2]
-    print(y)
+    ard = serial.Serial('COM6', 115200, timeout = 1)
+    ser = serial_servo(180, 1)
+    while True:
+        inangle = float(input())
+        angle = ser.angle2byte(1, inangle)
+        ard.write(angle[0])
+        ard.write(angle[1]) 
+        res = ard.readline()
+        print("ard: " + res.decode()[:len(res)-1])
+        
+
+
+
         
 
