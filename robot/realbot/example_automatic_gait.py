@@ -7,7 +7,7 @@ import time
 import math
 import datetime as dt
 
-import pybullet as p
+
 from .spotmicroai import Robot
 from .kinematicMotion import KinematicMotion,TrottingGait
 import serial
