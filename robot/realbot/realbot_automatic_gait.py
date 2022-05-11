@@ -113,9 +113,9 @@ def main(id, command_status):
         ser = serial_servo(180, 1)
         allangle =  robot.getAngle()*(180/math.pi)
         if uart_bool:
-             for i in 3:
-                 for j in 2:
-                    angl_float = 90 + allangle[i][j]
+             for val1 in round(4):
+                 for val2 in round(3):
+                    angl_float = 90 + allangle[val1][val2]
                     angle_byte = ser.angle2byte(1, angl_float)
                     ard.write(angle_byte[0])
                     ard.write(angle_byte[1]) 

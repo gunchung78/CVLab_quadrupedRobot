@@ -1,4 +1,4 @@
-from realbot import example_automatic_gait
+from realbot import realbot_automatic_gait
 
 #Road Balance 키보드 제어
 from multiprocessing import Process
@@ -12,7 +12,7 @@ if __name__ == "__main__":
         KeyProcess.start()
 
         # Main Process 
-        example_automatic_gait.main(2, KeyInputs.command_status)
+        realbot_automatic_gait.main(2, KeyInputs.command_status)
         
         print("terminate KeyBoard Input process")
         if KeyProcess.is_alive():
