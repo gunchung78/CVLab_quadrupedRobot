@@ -1,4 +1,5 @@
 
+from ctypes import sizeof
 from os import system, name 
 import sys
 sys.path.append("..")
@@ -7,7 +8,7 @@ import time
 import math
 import datetime as dt
 
-
+import pybullet as p
 from .spotmicroai import Robot
 from .kinematicMotion import KinematicMotion,TrottingGait
 import serial
@@ -60,9 +61,9 @@ stepLength=0
 stepHeight=72
 iXf=120
 iXb=-132
-# IDspurWidth = p.addUserDebugParameter("spur width", 0, robot.W, spurWidth)
-# IDstepHeight = p.addUserDebugParameter("step height", 0, 150, stepHeight)
-# IDheight = p.addUserDebugParameter("height", -40, 90, 40)
+IDspurWidth = p.addUserDebugParameter("spur width", 0, robot.W, spurWidth)
+IDstepHeight = p.addUserDebugParameter("step height", 0, 150, stepHeight)
+IDheight = p.addUserDebugParameter("height", -40, 90, 40)
 
 Lp = np.array([[iXf, -100,spurWidth, 1], [iXf, -100, -spurWidth, 1],
 [-50, -100, spurWidth, 1], [-50, -100, -spurWidth, 1]])
@@ -73,16 +74,16 @@ trotting=TrottingGait()
 def main(id, command_status):
     s=False
     while True:
-        # bodyPos=robot.getPos()
-        # bodyOrn,_,angularVel=robot.getIMU()
-        # xr,yr,_= p.getEulerFromQuaternion(bodyOrn)
-        # distance=math.sqrt(bodyPos[0]**2+bodyPos[1]**2)
-        # if distance>50:
-        #     robot.resetBody()
+        bodyPos=robot.getPos()
+        bodyOrn,_,angularVel=robot.getIMU()
+        xr,yr,_= p.getEulerFromQuaternion(bodyOrn)
+        distance=math.sqrt(bodyPos[0]**2+bodyPos[1]**2)
+        if distance>50:
+            robot.resetBody()
    
-        # ir=xr/(math.pi/180)
+        ir=xr/(math.pi/180)
         d=time.time()-rtime
-        # height = p.readUserDebugParameter(IDheight)
+        height = p.readUserDebugParameter(IDheight)
 
         result_dict = command_status.get()
         print(result_dict)
@@ -90,10 +91,10 @@ def main(id, command_status):
 
         print(robot.getAngle()) ###
         # print(sys.getsizeof(robot.getAngle())) ###
-        # rlegx, llegx, flegy, blegy= settingimu(xr, yr, iXf, spurWidth) ###
+        rlegx, llegx, flegy, blegy= settingimu(xr, yr, iXf, spurWidth) ###
         
         if result_dict['StartStepping']:
-            robot.feetPosition(trotting.positions(d-3, result_dict, ))
+            robot.feetPosition(trotting.positions(d-3, result_dict,bodyOrn))
         else:
             # Lp = np.array([[iXf, -100 + llegx + flegy, spurWidth, 1], 
             #             [iXf, -100 + rlegx + flegy, -spurWidth, 1],
@@ -103,10 +104,10 @@ def main(id, command_status):
             robot.feetPosition(Lp)
         #roll=-xr
 
-        # roll=0
-        # robot.bodyRotation((roll,math.pi/180*((joy_x)-128)/3,-(1/256*joy_y-0.5)))
-        # bodyX=50+yr*10
-        # robot.bodyPosition((bodyX, 40+height, -ir))
+        roll=0
+        robot.bodyRotation((roll,math.pi/180*((joy_x)-128)/3,-(1/256*joy_y-0.5)))
+        bodyX=50+yr*10
+        robot.bodyPosition((bodyX, 40+height, -ir))
         robot.step()
         
         #pyserial part
