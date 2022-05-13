@@ -26,7 +26,6 @@ except:
 
 rtime=time.time()
 
-
 def reset():
     global rtime
     rtime=time.time()    
@@ -44,15 +43,6 @@ def consoleClear():
     # for mac and linux(here, os.name is 'posix') 
     else: 
         _ = system('clear') 
-
-def settingimu(imux, imuy, iXf, spurWidth): ###
-    timux = math.tan(imux)
-    timuy = math.tan(imuy)
-    rlegx = timux*spurWidth
-    llegx = -timux*spurWidth
-    flegy = timuy*(iXf+50)
-    blegy = -timuy*50
-    return rlegx, llegx, flegy, blegy
 
 robot=Robot(False,False,reset)
 
@@ -88,21 +78,11 @@ def main(id, command_status):
         result_dict = command_status.get()
         print(result_dict)
         command_status.put(result_dict)
-
-        print(robot.getAngle()) ###
-        # print(sys.getsizeof(robot.getAngle())) ###
-        rlegx, llegx, flegy, blegy= settingimu(xr, yr, iXf, spurWidth) ###
         
         if result_dict['StartStepping']:
             robot.feetPosition(trotting.positions(d-3, result_dict,bodyOrn))
         else:
-            # Lp = np.array([[iXf, -100 + llegx + flegy, spurWidth, 1], 
-            #             [iXf, -100 + rlegx + flegy, -spurWidth, 1],
-            #             [-50, -100 + llegx + blegy, spurWidth, 1], 
-            #             [-50, -100 + rlegx + blegy, -spurWidth, 1]])
-                        ###
             robot.feetPosition(Lp)
-        #roll=-xr
 
         roll=0
         robot.bodyRotation((roll,math.pi/180*((joy_x)-128)/3,-(1/256*joy_y-0.5)))
@@ -113,9 +93,10 @@ def main(id, command_status):
         #pyserial part
         ser = serial_servo(180, 1)
         allangle =  robot.getAngle()*(180/math.pi)
+        print(np.round(allangle,3))
         if uart_bool:
-             for val1 in round(4):
-                 for val2 in round(3):
+             for val1 in range(4):
+                 for val2 in range(3):
                     angl_float = 90 + allangle[val1][val2]
                     angle_byte = ser.angle2byte(1, angl_float)
                     ard.write(angle_byte[0])
