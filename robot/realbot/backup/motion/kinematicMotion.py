@@ -84,6 +84,8 @@ class TrottingGait:
         self.Sa=0
         self.Spf=92 
         self.Spr=82
+        self.Fx_s = 120
+        self.Rx_s = 50
 
         self.IDspurFront= p.addUserDebugParameter("spur front", 20, 150, self.Spf)
         self.IDspurRear= p.addUserDebugParameter("spur rear", 20, 150, self.Spr)
@@ -95,8 +97,9 @@ class TrottingGait:
         self.IDt1 = p.addUserDebugParameter("t1", 0, 1000, self.t1)
         self.IDt2 = p.addUserDebugParameter("t2", 0, 1000, self.t2)
         self.IDt3 = p.addUserDebugParameter("t3", 0, 1000, self.t3)
-        self.IDfrontOffset = p.addUserDebugParameter("front Offset", 0,200, 120)
-        self.IDrearOffset = p.addUserDebugParameter("rear Offset", 0,200, 50)
+        self.IDfrontOffset = p.addUserDebugParameter("front Offset", 0,200, self.Fx_s)
+        self.IDrearOffset = p.addUserDebugParameter("rear Offset", 0,200, self.Rx_s)
+
         self.Rc=[-50,0,0,1] # rotation center
 
 

@@ -2,7 +2,7 @@ import time
 import numpy as np
 import math
 from .kinematics import Kinematic
-# import pybullet as p
+import pybullet as p
 
 class KinematicLegMotion:
 
@@ -165,8 +165,8 @@ class TrottingGait:
         Tt2=Tt/2
         td=(t*1000)%Tt
         rtd=(t*1000-Tt2)%Tt
-        # Fx=p.readUserDebugParameter(self.IDfrontOffset)
-        # Rx=-p.readUserDebugParameter(self.IDrearOffset)
+        Fx=p.readUserDebugParameter(self.IDfrontOffset)
+        Rx=-p.readUserDebugParameter(self.IDrearOffset)
         Fx = self.Fx_s
         Rx = -1*self.Rx_s
         Fy=-100
