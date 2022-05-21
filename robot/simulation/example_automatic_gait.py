@@ -13,7 +13,7 @@ from .spotmicroai import Robot
 from .kinematicMotion import KinematicMotion,TrottingGait
 import serial
 from .serial2servo import serial_servo
-
+from .multiprocess_kb import KeyInterrupt
 
 try:
     PORT = 'COM6' #포트이름
@@ -55,6 +55,7 @@ def settingimu(imux, imuy, iXf, spurWidth): ###
     return rlegx, llegx, flegy, blegy
 
 robot=Robot(False,False,reset)
+gait_t = KeyInterrupt().gait
 
 spurWidth=robot.W/2+20
 stepLength=0
@@ -91,9 +92,8 @@ def main(id, command_status):
 
         # print(sys.getsizeof(robot.getAngle())) ###
         rlegx, llegx, flegy, blegy= settingimu(xr, yr, iXf, spurWidth) ###
-        
         if result_dict['StartStepping']:
-            robot.feetPosition(trotting.positions(d-3, result_dict,bodyOrn))
+            robot.feetPosition(trotting.positions(d-3, gait_t, result_dict, bodyOrn))
         else:
             # Lp = np.array([[iXf, -100 + llegx + flegy, spurWidth, 1], 
             #             [iXf, -100 + rlegx + flegy, -spurWidth, 1],

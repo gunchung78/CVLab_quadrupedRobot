@@ -11,7 +11,7 @@ from multiprocessing import Process, Queue
 # keyboard Initialisation
 # Dictionary of keyboard controller buttons we want to include.
 key_value_default = {'w': 0, 'a': 0, 's': 0, 'd': 0, 'q': 0, 'e': 0, 'move': False }
-control_offset = {'IDstepLength': 0.0, 'IDstepWidth': 0.0, 'IDstepAlpha': 0.0, 'StartStepping': False }
+control_offset = {'IDstepLength': 0.0, 'IDstepWidth': 0.0, 'IDstepAlpha': 0.0, 'StartStepping': False, 'gait_type': "trot" }
 
 class KeyInterrupt():
 
@@ -19,6 +19,7 @@ class KeyInterrupt():
         # How many times Keys Pushed
         self.key_status = Queue()
         self.key_status.put(key_value_default)
+        self.gait = 0
         
         # Calculate Offset based on Key Status
         self.command_status = Queue()
@@ -26,9 +27,9 @@ class KeyInterrupt():
 
         # Offsets for Robot Control
         # Search calcRbStep for Usage
-        self.X_STEP = 10.0
-        self.Y_STEP = 5.0
-        self.YAW_STEP = 3.0
+        self.X_STEP = 30.0
+        self.Y_STEP = 15.0
+        self.YAW_STEP = 15.0
 
     def resetStatus(self):
         result_dict = self.key_status.get()
@@ -53,6 +54,11 @@ class KeyInterrupt():
             command_dict['StartStepping'] = True
         else:
             command_dict['StartStepping'] = False
+
+        if self.gait==0:
+            command_dict['gait_type'] = True
+        else:
+            command_dict['gait_type'] = False
 
         self.key_status.put(result_dict)
         self.command_status.put(command_dict)
@@ -91,6 +97,11 @@ class KeyInterrupt():
             elif keyboard.is_pressed('space'):
                 if not was_pressed:
                     self.resetStatus()
+                    was_pressed = True
+            elif keyboard.is_pressed('f'):
+                if not was_pressed:
+                    if self.gait == 1: self.gait = 0
+                    else: self.gait = 1
                     was_pressed = True
             else:
                 was_pressed = False

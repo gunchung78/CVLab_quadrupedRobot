@@ -4,6 +4,7 @@ import math
 from .kinematics import Kinematic
 import pybullet as p
 
+
 class KinematicLegMotion:
 
     def __init__(self,LLp):
@@ -134,7 +135,7 @@ class TrottingGait:
     def stepLength(self,len):
         self.Sl=len
 
-    def positions(self,t,kb_offset={},Orn=[0,0,0,0]):
+    def positions(self,t, gait, kb_offset={},Orn=[0,0,0,0]):
         spf= p.readUserDebugParameter(self.IDspurFront)
         spr= p.readUserDebugParameter(self.IDspurRear)
         self.Sh=p.readUserDebugParameter(self.IDstepHeight)
@@ -160,11 +161,33 @@ class TrottingGait:
 
         Fx=p.readUserDebugParameter(self.IDfrontOffset)
         Rx=-p.readUserDebugParameter(self.IDrearOffset)
-
         Fy=-100
-        Ry=-100
-        r=np.array([self.calcLeg(td,Fx,Fy,spf),
-                    self.calcLeg(rtd,Fx,Fy,-spf),
-                    self.calcLeg(rtd,Rx,Ry,spr),
-                    self.calcLeg(td,Rx,Ry,-spr)])
+        Ry=-100     
+
+        if kb_offset['gait_type'] == True:
+            Tt=(self.t0+self.t1+self.t2+self.t3)
+            Tt2=Tt/2
+            td=(t*1000)%Tt
+            rtd=(t*1000-Tt2)%Tt
+            r=np.array([self.calcLeg(td,Fx,Fy,spf),
+                        self.calcLeg(rtd,Fx,Fy,-spf),
+                        self.calcLeg(rtd,Rx,Ry,spr),
+                        self.calcLeg(td,Rx,Ry,-spr)])
+
+        elif kb_offset['gait_type'] == False:
+            self.t0 = 300
+            # self.t1 = 450
+            self.t2 = 300
+            # self.t3 = 120
+            Tt=(self.t0+self.t1+self.t2+self.t3)
+            Tt4=Tt/4
+            td=(t*800)%Tt # front left
+            td2=(t*800-Tt4*2)%Tt # front right
+            rtd=(t*800-Tt4*3)%Tt # rear left
+            rtd2=(t*800-Tt4*1)%Tt # rear right
+            r=np.array([self.calcLeg(td,Fx,Fy,spf),
+                self.calcLeg(td2,Fx,Fy,-spf),
+                self.calcLeg(rtd,Rx,Ry,spr),
+                self.calcLeg(rtd2,Rx,Ry,-spr)])
+        
         return r
