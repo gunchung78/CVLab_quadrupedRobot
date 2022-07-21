@@ -157,7 +157,7 @@ class Robot:
         if self.useStairs:
             stairsUid = p.loadURDF("../urdf/stairs_gen.urdf.xml", [0, -1, 0], orn)
         flags=p.URDF_USE_SELF_COLLISION
-        quadruped = p.loadURDF("../urdf/spotmicroai_gen.urdf.xml", self.init_position,
+        quadruped = p.loadURDF("../urdf/spotmicroai_gen_cv.urdf", self.init_position,
                             self.init_oritentation,
                             useFixedBase=self.useFixedBase,
                             useMaximalCoordinates=self.useMaximalCoordinates,
